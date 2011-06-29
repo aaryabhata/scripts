@@ -1,34 +1,36 @@
 This repo has utility scripts.
 
-ip-address mailer:
+1. postmyip.sh: periodically post the changing ip of linux machine.
 
-periodically post the ip of my laptop to my email
 
-Creating a git repo
 
-$ mkdir newrepo
-$ cd newrepo
-$ git init
-$ git add .
-$ vim README    # sample file
-$ git add .
-$ git commit -a -m"first commit to scripts"
-first commit to scripts
-1 files changed, 1 insertions(+), 0 deletions(-)
-create mode 100644 README
-----------------------------Create a bare repo version of it-------------------
-$ git clone --bare newrepo newrep.git
-Cloning into bare repository newrepo.git...
-done.
-$ cd newrepo.git/
-branches/    config       description  HEAD         hooks/       info/        objects/     packed-refs  refs/        
-$ 
-$ touch newrepo.git/git-daemon-export-ok
-$ cd newrepo.git/
-$ git --bare update-server-info
-$ mv hooks/post-update.sample hooks/post-update
-$ chmod a+x hooks/post-update 
+----------------------------- GIT CHEAT SHEET----------------------------
 
-The git repo is ready we can now pull and push from this repo
+1. Creating a git repo
 
-git add remotname //pathtoproject.git
+	$ mkdir newrepo
+	$ cd newrepo
+	$ git init
+	$ git add .
+	$ vim README    # sample file
+	$ git add .
+	$ git commit -a -m"first commit to scripts"
+	
+
+2.How to create a bare repo
+
+	$ git clone --bare newrepo newrepo.git
+	Cloning into bare repository newrepo.git...
+	done.
+	$ cd newrepo.git/
+	branches/    config       description  HEAD         hooks/       info/        objects/     packed-refs  refs/        
+	$ 
+	$ touch newrepo.git/git-daemon-export-ok
+	$ cd newrepo.git/
+	$ git --bare update-server-info
+	$ mv hooks/post-update.sample hooks/post-update
+	$ chmod a+x hooks/post-update 
+	
+	The git repo is ready we can now pull and push from this repo
+	
+	$git add remotename //pathtoproject.git
