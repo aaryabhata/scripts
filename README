@@ -42,5 +42,8 @@ This repo has utility scripts.
 4. Committing changes:
 	$ git commit -a -m"minor changes"
 	$ git push origin master
+
+5. Updating local copy:
+	$ git pull
 	
 	
