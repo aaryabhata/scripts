@@ -13,6 +13,7 @@ email=$1
 
 while [ 1 ]
 do
+	
 	wget http://automation.whatismyip.com/n09230945.asp -O /tmp/tmp_ipout.txt -o /dev/null
 	newip=`cat /tmp/tmp_ipout.txt`
 	if [ "$oldip" != "$newip" ];
