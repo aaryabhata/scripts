@@ -3,6 +3,7 @@
 ################################################################
 #Poll for ip changes and post the ip to your email
 #
+#
 #Can be run in crontab without while loop
 #*/5 * * * * /home/adam/script.sh will execute script.sh every 5 minutes.
 ################################################################
