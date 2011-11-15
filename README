@@ -34,3 +34,13 @@ This repo has utility scripts.
 	The git repo is ready we can now pull and push from this repo
 	
 	$git add remotename //pathtoproject.git
+
+
+3. Checking out a repo:
+	$ git clone git@github.com:kamalcoder/scripts.git
+
+4. Committing changes:
+	$ git commit -a -m"minor changes"
+	$ git push origin master
+	
+	
