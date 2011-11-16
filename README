@@ -47,3 +47,152 @@ This repo has utility scripts.
 	$ git pull
 	
 	
+Here's a transcript of working with setting up an initial repository, then copying data to and from a 'remote' repository, albeit in a different directory on the same system. The instructions are for a Unix-like environment (e.g. Cygwin on Windows).
+
+$ mkdir /tmp/example
+$ cd /tmp/example
+$ git init
+Initialized empty Git repository in /tmp/example/.git/
+$ echo "Hello, world" > README.txt
+$ git commit # Won't commit files by default
+# On branch master
+#
+# Initial commit
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	README.txt
+nothing added to commit but untracked files present (use "git add" to track)
+$ git add README.txt # Similar to Team -> Add to Version Control
+$ # git commit # Would prompt for message
+$ git commit -m "Added README.txt"
+	[master (root-commit) 0dd1f35] Added README.txt
+1 files changed, 1 insertions(+), 0 deletions(-)
+	create mode 100644 README.txt
+	$ echo "Hello, solar system" > README.txt
+	$ git commit
+# On branch master
+# Changed but not updated:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	modified:   README.txt
+#
+	no changes added to commit (use "git add" and/or "git commit -a")
+	$ git commit -a -m "Updated README.txt"
+	[master 9b1939a] Updated README.txt
+1 files changed, 1 insertions(+), 1 deletions(-)
+	$ git log --graph --oneline # Shows graph nodes (not much here) and change info
+	* 9b1939a Updated README.txt
+	* 0dd1f35 Added README.txt
+	$ git checkout -b french 0dd1f35 # create and switch to a new branch 'french'
+	Switched to a new branch 'french'
+	$ cat README.txt 
+	Hello, world
+	$ echo "Bonjour, tout le monde" > README.txt
+	$ git add README.txt # or commit -a
+	$ git commit -m "Ajouté README.txt"
+	[french 66a644c] Ajouté README.txt
+1 files changed, 1 insertions(+), 1 deletions(-)
+	$ git log --graph --oneline
+	* 66a644c Ajouté README.txt
+	* 0dd1f35 Added README.txt
+	$ git checkout -b web 0dd1f35 # Create and checkout a branch 'web' from initial commit
+	$ echo '<a href="http://git.eclipse.org">git.eclipse.org</a>' > index.html
+	$ git add index.html
+	$ git commit -m "Added homepage"
+	[web d47e30c] Added homepage
+1 files changed, 1 insertions(+), 0 deletions(-)
+	create mode 100644 index.html
+	$ git checkout master
+	$ git branch # See what branches we've got
+	french
+	* master
+	web
+	$ git merge web # pull 'web' into current branch 'master'
+	Merge made by recursive.
+	index.html |    1 +
+1 files changed, 1 insertions(+), 0 deletions(-)
+	create mode 100644 index.html
+	$ git checkout french # Switch to 'french' branch
+	Switched to branch 'french'
+	$ git merge web # And merge in the same
+	Merge made by recursive.
+	index.html |    1 +
+1 files changed, 1 insertions(+), 0 deletions(-)
+	create mode 100644 index.html
+	$ git log --graph --oneline
+	*   e974231 Merge branch 'web' into french
+	|\  
+	| * d47e30c Added homepage
+	* | 66a644c Ajouté README.txt
+	|/  
+	* 0dd1f35 Added README.txt
+	$ git checkout master
+	$ git log --graph --oneline
+	*   e3de4de Merge branch 'web'
+	|\  
+	| * d47e30c Added homepage
+	* | 9b1939a Updated README.txt
+	|/  
+	* 0dd1f35 Added README.txt
+	$ (mkdir /tmp/other;cd /tmp/other;git init) # Could do this in other process
+	$ (cd /tmp/other;git config --bool core.bare true) # Need to tell git that /tmp/other is a bare repository so we can "push" to it
+	Initialized empty Git repository in /tmp/other/.git/
+	$ git remote add other /tmp/other # could be a URL over http/git
+	$ git push other master # push branch 'master' to remote repository 'other'
+	Counting objects: 11, done.
+	Delta compression using up to 2 threads.
+	Compressing objects: 100% (7/7), done.
+	Writing objects: 100% (11/11), 981 bytes, done.
+Total 11 (delta 1), reused 0 (delta 0)
+	Unpacking objects: 100% (11/11), done.
+	To /tmp/other
+	* [new branch]      master -> master
+	$ git push --all other # Push all branches to 'other'
+	Counting objects: 8, done.
+	Delta compression using up to 2 threads.
+	Compressing objects: 100% (3/3), done.
+	Writing objects: 100% (5/5), 567 bytes, done.
+Total 5 (delta 0), reused 0 (delta 0)
+	Unpacking objects: 100% (5/5), done.
+	To /tmp/other
+	* [new branch]      french -> french
+	* [new branch]      web -> web
+	$ cd /tmp/other # Switch to 'other' repository
+	$ git config --bool core.bare false # need to allow this repository to have checked out files
+	$ ls # Nothing to be seen, but it's there
+	$ git branch
+	french
+	* master
+	web
+	$ git checkout web # Get the contents of the 'web' branch in other
+	$ ls
+	README.txt index.html
+	$ echo '<h1>Git rocks!</h1>' >> index.html
+	$ git commit -a -m "Added Git Rocks!"
+	[web 510621a] Added Git Rocks
+1 files changed, 1 insertions(+), 0 deletions(-)
+	$ cd /tmp/example # Back to first repo
+	$ git pull other web # Pull changes from 'other' repo 'web' branch
+	remote: Counting objects: 5, done.
+	remote: Compressing objects: 100% (3/3), done.
+remote: Total 3 (delta 0), reused 0 (delta 0)
+	Unpacking objects: 100% (3/3), done.
+	From /tmp/other
+	* branch            web        -> FETCH_HEAD
+	Merge made by recursive.
+	index.html |    1 +
+1 files changed, 1 insertions(+), 0 deletions(-)
+	$ git log --graph --oneline
+	*   146932f Merge branch 'web' of /tmp/other
+	|\  
+	| * 510621a Added Git Rocks
+	* |   e3de4de Merge branch 'web'
+	|\ \  
+	| |/  
+	| * d47e30c Added homepage
+	* | 9b1939a Updated README.txt
+	|/  
+	* 0dd1f35 Added README.txt
